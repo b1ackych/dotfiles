@@ -1,6 +1,5 @@
 syntax enable
 set background=dark
-"colorscheme atom-dark-256
 filetype plugin indent on
 
 set number
@@ -11,12 +10,16 @@ augroup numbertoggle
 	autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
 augroup END
 
+autocmd VimLeave * call system("xsel -ib", getreg('+'))
+silent! source $VIMRUNTIME/defaults.vim
+
 set ai
 set hlsearch
 set incsearch
 set sidescroll=1
 set tabstop=4
 set autoindent
+set ttymouse=sgr
 set mouse=a
 
 nnoremap <C-k> :m .+1<CR>==
