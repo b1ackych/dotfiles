@@ -1,0 +1,58 @@
+Config { font            = "Comic Neue Bold 14"
+       , additionalFonts = [ "Mononoki 11"
+                           , "Font Awesome 6 Free Solid 12"
+                           , "Font Awesome 6 Brands 12"
+                           ]
+       , bgColor      = "#fdf6e3"
+       , fgColor      = "#000000"
+       -- Position TopSize and BottomSize take 3 arguments:
+       --   an alignment parameter (L/R/C) for Left, Right or Center.
+       --   an integer for the percentage width, so 100 would be 100%.
+       --   an integer for the minimum pixel height for xmobar, so 24 would force a height of at least 24 pixels.
+       --   NOTE: The height should be the same as the trayer (system tray) height.
+       , position       = TopSize L 100 24
+       , lowerOnStart = True
+       , hideOnStart  = False
+       , allDesktops  = True
+       , persistent   = True
+       -- , iconRoot     = "~/.config/xmobar/xpm/"  -- default: "."
+       , commands = [
+                        -- Echos a "penguin" icon in front of the kernel output.
+                      Run Com "echo" ["<fn=3>\xf17c</fn>"] "penguin" 3600
+                        -- Get kernel version (script found in .local/bin)
+                    --, Run Com ".local/bin/kernel" [] "kernel" 36000
+                        -- Cpu usage in percent
+                    , Run Cpu ["-t", "<fn=2>\xf108</fn>  cpu: (<total>%)","-H","50","--high","red"] 20
+                        -- Ram used number and percent
+                    , Run Memory ["-t", "<fn=2>\xf233</fn>  mem: <used>M (<usedratio>%)"] 20
+                        -- Disk space free
+                    , Run DiskU [("/", "<fn=2>\xf0c7</fn>  ssd: <free> free")] [] 60
+                        -- Echos an "up arrow" icon in front of the uptime output.
+                    --, Run Com "echo" ["<fn=2>\xf0aa</fn>"] "uparrow" 3600
+                        -- Uptime
+                    --, Run Uptime ["-t", "uptime: <days>d <hours>h"] 360
+					    -- Layout
+					--, Run Com "setxkbmap -print | grep xkb_symbols | awk -F\"+\" '{print $2}'" [] "lang" 10
+					, Run Com "setxkbmap -query | grep layout | awk '{print $2}'" [] "lang" 10
+                    , Run DynNetwork [
+                          "--template" , "<dev>: <rx>, <tx>"
+                        , "--Low"      , "1000"       -- units: B/s
+                        , "--High"     , "5000"       -- units: B/s
+                        , "--low"      , "darkgreen"
+                        , "--normal"   , "darkorange"
+                        , "--high"     , "darkred"
+                        ] 10
+                    , Run Com "echo" ["<fn=2>\xf242</fn>"] "baticon" 3600
+                        -- Battery
+                    , Run BatteryP ["BAT0"] ["-t", "<acstatus><watts> (<left>%)"] 360
+                        -- Time and date
+                    , Run Date "%a  %b %d  %I:%M %p " "date" 5
+                        -- Script that dynamically adjusts xmobar padding depending on number of trayer icons.
+                    , Run Com ".config/xmobar/trayer-padding-icon.sh" [] "trayerpad" 20
+                        -- Prints out the left side items such as workspaces, layout, etc.
+                    , Run UnsafeStdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = " %UnsafeStdinReader% }{  <fc=#000000><action=`alacritty -e htop`>%cpu%</action></fc>   <fc=#000000><action=`alacritty -e htop`>%memory%</action></fc>   <fc=#000000><action=`thunar /home/roman/`>%disku%</action></fc>   <fc=#000000>%baticon%  %battery%</fc>  %flags%  <fc=#000000>%date%</fc> "
+       }
