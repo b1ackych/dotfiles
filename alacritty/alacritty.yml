@@ -89,7 +89,7 @@
 # Font configuration
 font:
   # Normal (roman) font face
-  size: 10.5
+  size: 11
   normal:
     # Font family
     #
@@ -620,6 +620,10 @@ cursor:
 #
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
+key_bindings:
+  - { key: V,        mods: Super,           action: Paste            }
+  - { key: C,        mods: Super,           action: Copy             }
+  
 #key_bindings:
   #- { key: Paste,                                action: Paste          }
   #- { key: Copy,                                 action: Copy           }
